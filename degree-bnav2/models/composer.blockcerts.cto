@@ -1,0 +1,61 @@
+/**
+ * A library of reusable types and concepts 
+ * based on the blockcerts standards: 
+ * https://github.com/blockchain-certificates/cert-schema
+ * blockcerts is an extension of Open Badges v2: 
+ * https://www.imsglobal.org/sites/default/files/Badges/OBv2p0/index.html
+ */
+ namespace composer.blockcerts
+
+abstract asset Certificate {
+  o String typeC default='Assertion'
+  o Badge badge
+  o String context default='https://w3id.org/openbadges/v2,https://w3id.org/blockcerts/v2'
+  o Boolean revoked default=false optional
+} 
+/*
+include latter verification
+o Verification verification optional
+*/ 
+
+concept Badge {
+  o String id
+  o String typen default='BadgeClass'
+  o String name 
+  o String description
+  o String image optional
+  o String criteria optional
+  o Issuer issuer
+}
+
+concept Issuer {
+  o String id
+  o String typen default='Profile'
+  o String name
+  o String urln
+  o String email
+  o String description optional
+  o String image optional
+  o School school
+  o SignatureLines signatureLines
+}
+
+concept SignatureLines {
+  o String typen default='SignatureLine,Extension'
+  o String name 
+  o String image 
+  o String jobtitle
+}
+
+concept School {
+  o String id
+  o String typen default='School,Extension'
+  o String name
+  o String urln
+  o String email
+  o String image 
+}
+
+/*
+concept Verification {}
+*/

@@ -1,0 +1,104 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Write your model definitions here
+ */
+
+namespace org.bforos
+
+enum TypeRO {
+  // type of research objects
+  o document
+  o code
+  o image
+  o dataset
+  o presentation
+  o dicom
+  o tech_supp
+  o other
+}
+
+asset ResearchOJ identified by ROId {
+  o String ROId
+  o TypeRO typero default="other"
+  o String address
+  // location in www or DOI
+  o Integer reward default=5
+  o Integer cost default=1
+  //  o Boolean available default=True, availability for transaction
+  --> Researcher owner optional
+  --> Researcher[] contributors optional
+  }
+
+/*
+asset Disco identified by DiscoId {
+  o String DiscoId
+  o String[] Robjs
+}
+*/
+
+participant Researcher identified by email {
+  o String email
+  o String firstName
+  o String lastName
+  o Integer wallet default=10
+}
+
+participant Institution identified by InsId {
+  o String InsId
+  o String InsName
+  o Integer budget default=100
+}
+
+// should RO be created as a transaction Create RO?
+
+transaction Claim {
+  --> ResearchOJ Ro
+  --> Researcher claimer
+}
+
+event WalletEvent {
+  --> Researcher claimer
+  o Integer oldbalance
+  o Integer newbalance
+}
+
+transaction Collect {
+  --> ResearchOJ Ro
+  --> Researcher claimer
+  // Boolean chech if it can be collect
+}
+
+transaction Enrich {
+  --> ResearchOJ Ro
+  --> Researcher contributor
+  // Boolean check if it can be enriched
+}
+
+transaction ResearchOJHistory {
+  o String ROId
+}
+
+event ResearchOJHistoryResults {
+  o String[] results
+}
+
+/*
+transaction CollectDisco {
+  --> Disco Ros
+  --> Researcher user
+}
+
+*/
